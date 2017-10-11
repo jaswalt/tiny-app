@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>TinyApp</title>
-</head>
+<% include ./partials/_header %>
+
 <body>
     <h2>URLs</h2>
-
       <ul>
         <% for(url in urls) { %>
-          <li><%= url %> : <% url[urls] %></li>
+          <li><%= url %> : <%= urls[url].longURL %></li>
         <% }; %>
       </ul>
 
       <p><a href=>Shorten New Link</a></p>
 
 </body>
-</html>
