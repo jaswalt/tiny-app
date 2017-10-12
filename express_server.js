@@ -26,6 +26,16 @@ app.get("/", (req, res) => {
   res.end("Hello!");
 });
 
+app.post("/login", (req, res) => {
+  let username = req.body.username;
+  if (username) {
+    res.cookie("username", username);
+    res.redirect("/urls");
+  } else {
+    res.status(400).send("Enter a username to log in.")
+  }
+});
+
 app.get("/urls", (req, res) => {
   let templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
