@@ -64,6 +64,15 @@ app.post("/urls/:id/delete", (req, res) => {
   res.redirect("/urls");
 });
 
+app.post("/urls/:id/update", (req, res) => {
+  if (!req.body.longURL) {
+    res.status(400).send("Please input a new URL.")
+  } else {
+    urlDatabase[req.params.id] = { longURL: req.body.longURL }
+    res.redirect("/urls/" + req.params.id);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
