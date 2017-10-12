@@ -1,8 +1,10 @@
 <% include ./partials/_header %>
 
 <body>
-    <h2>Shortened URL</h2>
-      <ul>
-        <li><%= shortURL %> : <%= urls[shortURL].longURL %></li>
-      </ul>
+      <h2>ShortURL: <%= shortURL %></h2>
+      <form action="/urls/<%= shortURL %>/update" method="POST">
+        <label for="longURL"></label>
+        <input id="longURL" type="text" name="longURL" placeholder="<%= urls[shortURL].longURL %>" style="width: 200px">
+        <input type="submit" value="Update">
+      </form>
 </body>
