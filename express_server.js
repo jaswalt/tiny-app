@@ -10,10 +10,23 @@ app.use(cookieParser());
 
 app.set("view engine", "ejs");
 
-var urlDatabase = {
+const urlDatabase = {
   "b2xVn2": {longURL: "http://www.lighthouselabs.ca"},
   "9sm5xK": {longURL: "http://www.google.com"}
 };
+
+const users = {
+  "user1": {
+    id: "user1",
+    email: "user1@example.com",
+    password: "password1"
+  },
+  "user2": {
+    id: "user2",
+    email: "user2@example.com",
+    password: "password2"
+  }
+}
 
 function generateRandomString(length) {
   let randomString = "";
@@ -41,6 +54,23 @@ app.post("/login", (req, res) => {
 
 app.post("/logout", (req, res) => {
   res.clearCookie("username");
+  res.redirect("/urls");
+});
+
+app.get("/register", (req, res) => {
+  res.render("urls_register");
+});
+
+app.post("/register", (req, res) => {
+  let userID = generateRandomString(4);
+  let email = req.body.email;
+  let password = req.body.password;
+
+  users[userID] = { id: userID,
+                    email: email,
+                    password: password };
+
+  res.cookie("user_id", userID);
   res.redirect("/urls");
 });
 
