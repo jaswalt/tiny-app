@@ -38,6 +38,15 @@ function generateRandomString(length) {
   return randomString;
 }
 
+function findUserByEmail(email) {
+  for (let userId in users) {
+    let user = users[userId];
+    if(user.email === email) {
+      return user;
+    }
+  }
+};
+
 app.get("/", (req, res) => {
   res.end("Hello!");
 });
@@ -62,16 +71,21 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  let userID = generateRandomString(4);
   let email = req.body.email;
   let password = req.body.password;
 
-  users[userID] = { id: userID,
-                    email: email,
-                    password: password };
-
-  res.cookie("user_id", userID);
-  res.redirect("/urls");
+  if (!email || !password) {
+    res.status(400).send("Please enter an email and a password.");
+  } else if (findUserByEmail(email)) {
+    res.status(400).send("Email has already been used.")
+  } else {
+    let userID = generateRandomString(4);
+    users[userID] = { id: userID,
+                      email: email,
+                      password: password };
+    res.cookie("user_id", userID);
+    res.redirect("/urls");
+  }
 });
 
 app.get("/urls", (req, res) => {
