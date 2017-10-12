@@ -39,15 +39,29 @@ app.post("/urls", (req, res) => {
   if (!req.body.longURL) {
     res.status(400).send("Please input a URL.")
   } else {
-    const shortURL = generateRandomString(6);
+    let shortURL = generateRandomString(6);
     urlDatabase[shortURL] = { longURL: req.body.longURL }
     res.redirect("/urls/" + shortURL);
+  }
+});
+
+app.get("/u/:shortURL", (req, res) => {
+  let longURL = urlDatabase[req.params.shortURL].longURL
+  if (req.params.shortURL in urlDatabase) {
+    res.redirect(longURL);
+  } else {
+    res.status(302).send("Shortened URL does not exist.");
   }
 });
 
 app.get("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id, urls: urlDatabase };
   res.render("urls_show", templateVars);
+});
+
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id];
+  res.redirect("/urls");
 });
 
 app.listen(PORT, () => {
