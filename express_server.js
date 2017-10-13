@@ -11,8 +11,10 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 
 const urlDatabase = {
-  "b2xVn2": {longURL: "http://www.lighthouselabs.ca"},
-  "9sm5xK": {longURL: "http://www.google.com"}
+  "b2xVn2": {longURL: "http://www.lighthouselabs.ca",
+             userID: "user1"},
+  "9sm5xK": {longURL: "http://www.google.com",
+             userID: "user2"}
 };
 
 const users = {
@@ -148,16 +150,28 @@ app.get("/urls/:id", (req, res) => {
 });
 
 app.post("/urls/:id/delete", (req, res) => {
-  delete urlDatabase[req.params.id];
-  res.redirect("/urls");
+  let userID = urlDatabase[req.params.id].userID;
+
+  if (req.cookies["user_id"] === userID) {
+    delete urlDatabase[req.params.id];
+    res.redirect("/urls");
+  } else {
+    res.status(403).send("You do not have permission to modify this link.");
+  }
 });
 
 app.post("/urls/:id/update", (req, res) => {
-  if (!req.body.longURL) {
-    res.status(400).send("Please input a new URL.")
+  let userID = urlDatabase[req.params.id].userID;
+
+  if (req.cookies["user_id"] === userID) {
+    if (!req.body.longURL) {
+      res.status(400).send("Please input a new URL.");
+    } else {
+      urlDatabase[req.params.id].longURL = req.body.longURL;
+      res.redirect("/urls/" + req.params.id);
+    }
   } else {
-    urlDatabase[req.params.id] = { longURL: req.body.longURL }
-    res.redirect("/urls/" + req.params.id);
+    res.status(403).send("You do not have permission to modify this link.");
   }
 });
 
