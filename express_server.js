@@ -47,14 +47,14 @@ function findUserByEmail(email) {
   }
 };
 
-app.get("/", (req, res) => {
-  res.end("Hello!");
-});
+function getUser(cookieID) {
+  return users[cookieID];
+};
 
 app.post("/login", (req, res) => {
-  let username = req.body.username;
+  let user_id = req.body.username;
   if (username) {
-    res.cookie("username", username);
+    res.cookie("user_id", user_id);
     res.redirect("/urls");
   } else {
     res.status(400).send("Enter a username to log in.")
@@ -62,7 +62,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect("/urls");
 });
 
@@ -83,19 +83,19 @@ app.post("/register", (req, res) => {
     users[userID] = { id: userID,
                       email: email,
                       password: password };
-    res.cookie("user_id", userID);
+    res.cookie("user_id", users[userID]);
     res.redirect("/urls");
   }
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { username: req.cookies["username"],
+  let templateVars = { user: getUser(req.cookies["user_id"]),
                        urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { username: req.cookies["username"] }
+  let templateVars = { user: getUser(req.cookies["user_id"]) }
   res.render("urls_new", templateVars);
 });
 
@@ -119,7 +119,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { username: req.cookies["username"],
+  let templateVars = { user: getUser(req.cookies["user_id"]),
                        shortURL: req.params.id,
                        urls: urlDatabase };
   res.render("urls_show", templateVars);

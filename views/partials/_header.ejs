@@ -4,13 +4,13 @@
   <title>TinyApp</title>
 </head>
 <body>
-  <% if (!username) { %>
+  <% if (!user) { %>
     <form action= "/login" method= "POST" style="margin:0px;">
-      <input id="username" type="text" name="username" placeholder="Username" style="width: 200px">
+      <input id="user" type="text" name="user" placeholder="Username" style="width: 200px">
       <input type="submit" value="Login">
     </form>
   <% } else { %>
-    <p>Logged in as <%= username %></p>
+    <p>Logged in as <%= users[user_id].email %></p>
     <form action= "/logout" method= "POST">
       <input type="submit" value="Logout">
     </form>
