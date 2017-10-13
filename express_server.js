@@ -51,6 +51,11 @@ function getUser(cookieID) {
   return users[cookieID];
 };
 
+app.get("/login", (req, res) => {
+  let user = getUser(req.cookies["user_id"]);
+  res.render("urls_login.ejs", {user: user});
+});
+
 app.post("/login", (req, res) => {
   let user_id = req.body.username;
   if (username) {

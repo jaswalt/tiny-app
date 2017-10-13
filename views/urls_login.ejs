@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<body>
+  <% if (!user) { %>
+    <h2>Login</h2>
+    <form action= "/login" method= "POST" style="margin:0px;">
+      <input id="email" type="email" name="email" placeholder="email@email.com" style="width: 200px">
+      <input id="password" type="password" name="password" placeholder="Password" style="width: 200px">
+      <input type="submit" value="Login">
+    </form>
+  <% } else { %>
+    <p>Logged in as <%= users[user_id].email %></p>
+    <form action= "/logout" method= "POST">
+      <input type="submit" value="Logout">
+    </form>
+  <% } %>
+</body>
+</html>
