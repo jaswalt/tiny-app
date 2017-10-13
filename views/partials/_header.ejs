@@ -8,7 +8,7 @@
     <a href="/login">Login</a>
     <a href="/register">Register</a>
   <% } else { %>
-    <p>Logged in as <%= users[user_id].email %></p>
+    <p>Logged in as <%= user.id %></p>
     <form action= "/logout" method= "POST">
       <input type="submit" value="Logout">
     </form>

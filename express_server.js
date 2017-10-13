@@ -51,18 +51,31 @@ function getUser(cookieID) {
   return users[cookieID];
 };
 
+function verifyEmail(email) {
+  for (let userID in users) {
+    if (users[userID].email === email) {
+      return userID;
+    }
+  }
+  return false;
+};
+
+function verifyPassword(user_id, password) {
+  return (users[user_id].password === password);
+}
+
 app.get("/login", (req, res) => {
   let user = getUser(req.cookies["user_id"]);
   res.render("urls_login.ejs", {user: user});
 });
 
 app.post("/login", (req, res) => {
-  let user_id = req.body.username;
-  if (username) {
+  let user_id = verifyEmail(req.body.email);
+  if (user_id && verifyPassword(user_id, req.body.password)) {
     res.cookie("user_id", user_id);
     res.redirect("/urls");
   } else {
-    res.status(400).send("Enter a username to log in.")
+    res.status(403).send("Email or password is incorrect.")
   }
 });
 
