@@ -14,7 +14,9 @@ const urlDatabase = {
   "b2xVn2": {longURL: "http://www.lighthouselabs.ca",
              userID: "user1"},
   "9sm5xK": {longURL: "http://www.google.com",
-             userID: "user2"}
+             userID: "user2"},
+  "h6W0ae": {longURL: "http://www.amazon.ca",
+             userID: "user1"}
 };
 
 const users = {
@@ -66,6 +68,17 @@ function verifyPassword(user_id, password) {
   return (users[user_id].password === password);
 }
 
+function urlsForUser(id) {
+  let urlsForUser = {};
+
+  for (let url in urlDatabase) {
+    if (urlDatabase[url].userID === id) {
+      urlsForUser[url] = urlDatabase[url];
+    }
+  }
+  return urlsForUser;
+}
+
 app.get("/login", (req, res) => {
   let user = getUser(req.cookies["user_id"]);
   res.render("urls_login.ejs", {user: user});
@@ -110,7 +123,7 @@ app.post("/register", (req, res) => {
 
 app.get("/urls", (req, res) => {
   let templateVars = { user: getUser(req.cookies["user_id"]),
-                       urls: urlDatabase };
+                       urls: urlsForUser(req.cookies["user_id"]) };
   res.render("urls_index", templateVars);
 });
 
@@ -145,7 +158,7 @@ app.get("/u/:shortURL", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   let templateVars = { user: getUser(req.cookies["user_id"]),
                        shortURL: req.params.id,
-                       urls: urlDatabase };
+                       urls: urlsForUser(req.cookies["user_id"]) };
   res.render("urls_show", templateVars);
 });
 

@@ -1,10 +1,16 @@
 <% include ./partials/_header %>
 
 <body>
+    <% if (!user) { %>
+      <p>Please login to see your URLs.</p>
+    <% } else if (!urls[shortURL.longURL]) { %>
+      <p>You do not have permission to view this url.</p>
+    <% } else { %>
       <h2>ShortURL: <%= shortURL %></h2>
-      <form action="/urls/<%= shortURL %>/update" method="POST">
-        <label for="longURL"></label>
-        <input id="longURL" type="text" name="longURL" placeholder="<%= urls[shortURL].longURL %>" style="width: 200px">
-        <input type="submit" value="Update">
-      </form>
+        <form action="/urls/<%= shortURL %>/update" method="POST">
+          <label for="longURL"></label>
+          <input id="longURL" type="text" name="longURL" placeholder="<%= urls[shortURL].longURL %>" style="width: 200px">
+          <input type="submit" value="Update">
+        </form>
+    <% } %>
 </body>
