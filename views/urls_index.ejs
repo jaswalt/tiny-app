@@ -2,6 +2,9 @@
 
 <body>
     <h2>URLs</h2>
+      <% if (!user) { %>
+        <p>Please login to see your URLs.</p>
+      <% } %>
       <ul>
         <% for(url in urls) { %>
           <li>
